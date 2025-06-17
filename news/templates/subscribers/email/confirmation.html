@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Your Newsletter Subscription</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 40px 30px;
+            background-color: #ffffff;
+        }
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 15px 35px;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 25px 0;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        .button:hover {
+            transform: translateY(-2px);
+        }
+        .url-box {
+            word-break: break-all;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 25px 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📧 Confirm Your Newsletter Subscription</h1>
+            <p>Just one more step to complete your subscription</p>
+        </div>
+
+        <div class="content">
+            <h2>Hello{% if subscriber.full_name %} {{ subscriber.full_name }}{% endif %}!</h2>
+
+            <p>Thank you for subscribing to our newsletter! We're excited to have you join our community.</p>
+
+            <p>To complete your subscription and start receiving our updates, please confirm your email address by clicking the button below:</p>
+
+            <div style="text-align: center;">
+                <a href="{{ confirmation_url }}" class="button">✅ Confirm My Subscription</a>
+            </div>
+
+            <p>If the button doesn't work, you can also copy and paste this link into your browser:</p>
+            <div class="url-box">
+                {{ confirmation_url }}
+            </div>
+
+            <div class="warning-box">
+                <strong>⏰ Important:</strong> This confirmation link will expire in 7 days. If you don't confirm within this time, you'll need to subscribe again.
+            </div>
+
+            <p><strong>What happens after confirmation?</strong></p>
+            <ul>
+                <li>You'll receive a welcome email with more information</li>
+                <li>You'll start receiving our regular newsletter updates</li>
+                <li>You can unsubscribe at any time with one click</li>
+            </ul>
+
+            <p>If you didn't subscribe to our newsletter, you can safely ignore this email.</p>
+
+            <p>Best regards,<br>
+            <strong>The Newsletter Team</strong></p>
+        </div>
+
+        <div class="footer">
+            <p>This email was sent to <strong>{{ subscriber.email }}</strong></p>
+            <p>If you have any questions, please contact us.</p>
+            <p>&copy; 2024 The Idea Engine. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

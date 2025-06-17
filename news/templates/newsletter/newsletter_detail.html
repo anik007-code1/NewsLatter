@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ newsletter.title }} - Newsletter App{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>{{ newsletter.title }}</h1>
+            <span class="badge 
+                {% if newsletter.status == 'Sent' %}bg-success
+                {% elif newsletter.status == 'Scheduled' %}bg-info
+                {% elif newsletter.status == 'Ready to Send' %}bg-warning
+                {% else %}bg-secondary{% endif %} fs-6">
+                {{ newsletter.status }}
+            </span>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Newsletter Content</h5>
+            </div>
+            <div class="card-body">
+                <div class="newsletter-preview">
+                    <h6><strong>Subject:</strong> {{ newsletter.subject }}</h6>
+                    <hr>
+                    <div class="content">
+                        {{ newsletter.content|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="btn-group mb-4" role="group">
+            <a href="{% url 'newsletter:list' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+            {% if not newsletter.is_sent %}
+            <a href="{% url 'newsletter:edit' newsletter.pk %}" class="btn btn-outline-primary">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            {% endif %}
+            <a href="{% url 'newsletter:preview' newsletter.pk %}" class="btn btn-outline-info">
+                <i class="fas fa-search"></i> Preview
+            </a>
+            {% if not newsletter.is_sent %}
+            <form method="post" action="{% url 'newsletter:send' newsletter.pk %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success" 
+                        onclick="return confirm('Are you sure you want to send this newsletter to all subscribers?')">
+                    <i class="fas fa-paper-plane"></i> Send Now
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Newsletter Info -->
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">Newsletter Information</h6>
+            </div>
+            <div class="card-body">
+                <p><strong>Created by:</strong> {{ newsletter.created_by.username }}</p>
+                <p><strong>Created:</strong> {{ newsletter.created_at|date:"M d, Y H:i" }}</p>
+                <p><strong>Updated:</strong> {{ newsletter.updated_at|date:"M d, Y H:i" }}</p>
+                {% if newsletter.scheduled_date %}
+                <p><strong>Scheduled:</strong> {{ newsletter.scheduled_date|date:"M d, Y H:i" }}</p>
+                {% endif %}
+                {% if newsletter.sent_date %}
+                <p><strong>Sent:</strong> {{ newsletter.sent_date|date:"M d, Y H:i" }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="mb-0">Statistics</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="stat-number text-primary">{{ newsletter.total_recipients }}</div>
+                        <small class="text-muted">Recipients</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-number text-success">{{ newsletter.total_sent }}</div>
+                        <small class="text-muted">Sent</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-number text-danger">{{ newsletter.total_failed }}</div>
+                        <small class="text-muted">Failed</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if newsletter.send_logs.exists %}
+        <div class="card shadow mt-4">
+            <div class="card-header">
+                <h6 class="mb-0">Recent Send Logs</h6>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    {% for log in newsletter.send_logs.all|slice:":5" %}
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small>{{ log.recipient_email }}</small>
+                            <span class="badge 
+                                {% if log.status == 'sent' %}bg-success
+                                {% elif log.status == 'failed' %}bg-danger
+                                {% else %}bg-warning{% endif %}">
+                                {{ log.get_status_display }}
+                            </span>
+                        </div>
+                        <small class="text-muted">{{ log.sent_at|date:"M d, H:i" }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

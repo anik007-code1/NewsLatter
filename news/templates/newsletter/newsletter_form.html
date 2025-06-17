@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ title }} - The Idea Engine{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i class="fas fa-edit"></i> {{ title }}</h1>
+            <a href="{% url 'newsletter:list' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label style="color: white;" for="id_title" class="form-label">Newsletter Title *</label>
+                        <input type="text" name="title" id="id_title" class="form-control" placeholder="Enter newsletter title"
+                               value="{% if newsletter %}{{ newsletter.title }}{% endif %}" required>
+                        {% if form.title.errors %}
+                            <div class="text-danger">{{ form.title.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label style="color: white;" for="id_subject" class="form-label">Email Subject *</label>
+                        <input type="text" name="subject" id="id_subject" class="form-control" placeholder="Enter email subject line"
+                               value="{% if newsletter %}{{ newsletter.subject }}{% endif %}" required>
+                        {% if form.subject.errors %}
+                            <div class="text-danger">{{ form.subject.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label style="color: white;" for="id_content" class="form-label">Newsletter Content *</label>
+                        <textarea name="content" id="id_content" class="form-control" rows="12" placeholder="Write your newsletter content here... You can use HTML tags for formatting." required>{% if newsletter %}{{ newsletter.content }}{% endif %}</textarea>
+                        {% if form.content.errors %}
+                            <div class="text-danger">{{ form.content.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">
+                            <small class="text-white">
+                                💡 <strong>Tip:</strong> You can use HTML tags like &lt;h2&gt;, &lt;p&gt;, &lt;strong&gt;, &lt;ul&gt;, &lt;li&gt; for formatting.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_scheduled" id="id_is_scheduled" class="form-check-input"
+                                       {% if newsletter and newsletter.is_scheduled %}checked{% endif %}>
+                                <label for="id_is_scheduled" class="form-check-label text-white">Schedule for later</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="datetime-local" name="scheduled_date" id="id_scheduled_date" class="form-control"
+                                   value="{% if newsletter and newsletter.scheduled_date %}{{ newsletter.scheduled_date|date:'Y-m-d\TH:i' }}{% endif %}"
+                                   style="{% if not newsletter or not newsletter.is_scheduled %}display: none;{% endif %}">
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" name="save_draft" class="btn btn-outline-primary btn-lg me-md-2">
+                            <i class="fas fa-save me-2"></i>Save as Draft
+                        </button>
+                        <button type="submit" name="save_and_preview" class="btn btn-info btn-lg me-md-2">
+                            <i class="fas fa-eye me-2"></i>Save & Preview
+                        </button>
+                        {% if not newsletter or not newsletter.is_sent %}
+                        <button type="submit" name="save_and_send" class="btn btn-lg"
+                                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white;"
+                                onclick="return confirm('Are you sure you want to save and send this newsletter to all subscribers?')">
+                            <i class="fas fa-paper-plane me-2"></i>Save & Send Now
+                        </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if newsletter %}
+        <div class="mt-3">
+            <div class="btn-group" role="group">
+                <a href="{% url 'newsletter:detail' newsletter.pk %}" class="btn btn-outline-info">
+                    <i class="fas fa-eye"></i> View Details
+                </a>
+                <a href="{% url 'newsletter:preview' newsletter.pk %}" class="btn btn-outline-success">
+                    <i class="fas fa-search"></i> Preview
+                </a>
+                {% if not newsletter.is_sent %}
+                <form method="post" action="{% url 'newsletter:send' newsletter.pk %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning" 
+                            onclick="return confirm('Are you sure you want to send this newsletter to all subscribers?')">
+                        <i class="fas fa-paper-plane"></i> Send Now
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle scheduling checkbox
+    const scheduleCheckbox = document.getElementById('id_is_scheduled');
+    const scheduleDateInput = document.getElementById('id_scheduled_date');
+
+    scheduleCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            scheduleDateInput.style.display = 'block';
+            scheduleDateInput.required = true;
+            // Set minimum date to current time
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            scheduleDateInput.min = now.toISOString().slice(0, 16);
+        } else {
+            scheduleDateInput.style.display = 'none';
+            scheduleDateInput.required = false;
+            scheduleDateInput.value = '';
+        }
+    });
+
+    // Auto-save functionality (optional)
+    const form = document.querySelector('form');
+    const inputs = form.querySelectorAll('input, textarea, select');
+
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            // You could implement auto-save here
+            console.log('Content changed');
+        });
+    });
+
+    // Form validation
+    form.addEventListener('submit', function(e) {
+        const title = document.getElementById('id_title').value.trim();
+        const subject = document.getElementById('id_subject').value.trim();
+        const content = document.getElementById('id_content').value.trim();
+
+        if (!title || !subject || !content) {
+            e.preventDefault();
+            alert('Please fill in all required fields (Title, Subject, and Content).');
+            return false;
+        }
+
+        if (scheduleCheckbox.checked && !scheduleDateInput.value) {
+            e.preventDefault();
+            alert('Please select a date and time for scheduling.');
+            return false;
+        }
+    });
+});
+</script>
+{% endblock %}

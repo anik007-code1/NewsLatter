@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Unsubscribed - Newsletter App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <div class="card shadow">
+            <div class="card-body py-5">
+                <i class="fas fa-check-circle fa-5x text-success mb-4"></i>
+                <h1 class="text-success">Successfully Unsubscribed</h1>
+                <p class="lead">You have been removed from our newsletter list.</p>
+                <p class="text-muted">
+                    We're sorry to see you go! You will no longer receive newsletter emails from us.
+                </p>
+                
+                <div class="alert alert-info mt-4">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Changed your mind?</strong> 
+                    You can always subscribe again anytime.
+                </div>
+                
+                <div class="mt-4">
+                    <a href="{% url 'newsletter:home' %}" class="btn btn-primary me-2">
+                        <i class="fas fa-home"></i> Back to Home
+                    </a>
+                    <a href="{% url 'subscribers:subscribe' %}" class="btn btn-outline-success">
+                        <i class="fas fa-envelope"></i> Subscribe Again
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

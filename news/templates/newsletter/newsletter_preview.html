@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Preview {{ newsletter.title }} - Newsletter App{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i class="fas fa-search"></i> Preview Newsletter</h1>
+            <a href="{% url 'newsletter:detail' newsletter.pk %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Details
+            </a>
+        </div>
+
+        <!-- Email Preview -->
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-envelope"></i> Email Preview
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <!-- Email Header Simulation -->
+                <div class="bg-light p-3 border-bottom">
+                    <div class="row">
+                        <div class="col-sm-2"><strong>From:</strong></div>
+                        <div class="col-sm-10">Newsletter App &lt;noreply@newsletter.com&gt;</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><strong>Subject:</strong></div>
+                        <div class="col-sm-10">{{ newsletter.subject }}</div>
+                    </div>
+                </div>
+                
+                <!-- Email Content -->
+                <div class="p-4" style="background-color: #ffffff;">
+                    <!-- Newsletter Header -->
+                    <div style="background-color: #007bff; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0;">
+                        <h1 style="margin: 0;">📰 {{ newsletter.title }}</h1>
+                    </div>
+                    
+                    <!-- Newsletter Content -->
+                    <div style="background-color: #ffffff; padding: 30px; border: 1px solid #dee2e6;">
+                        {{ newsletter.content|safe }}
+                    </div>
+                    
+                    <!-- Newsletter Footer -->
+                    <div style="background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #666; border-radius: 0 0 5px 5px; border: 1px solid #dee2e6; border-top: none;">
+                        <p>You're receiving this email because you subscribed to our newsletter.</p>
+                        <p><a href="#" style="color: #666; text-decoration: none;">Click here to unsubscribe</a></p>
+                        <p>&copy; 2024 Newsletter App. All rights reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Send Test Email -->
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-paper-plane"></i> Send Test Email
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">Send a preview of this newsletter to your email to see how it looks in your inbox.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_preview_email" class="form-label">Send preview to:</label>
+                        <input type="email" name="preview_email" id="id_preview_email" class="form-control" placeholder="Enter email address" required>
+                        {% if form.preview_email.errors %}
+                            <div class="text-danger">{{ form.preview_email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-info w-100">
+                        <i class="fas fa-paper-plane"></i> Send Preview
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Newsletter Actions -->
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="mb-0">Actions</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    {% if not newsletter.is_sent %}
+                    <a href="{% url 'newsletter:edit' newsletter.pk %}" class="btn btn-outline-primary">
+                        <i class="fas fa-edit"></i> Edit Newsletter
+                    </a>
+                    <form method="post" action="{% url 'newsletter:send' newsletter.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success w-100" 
+                                onclick="return confirm('Are you sure you want to send this newsletter to all subscribers?')">
+                            <i class="fas fa-paper-plane"></i> Send to All Subscribers
+                        </button>
+                    </form>
+                    {% else %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> This newsletter has already been sent.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter Info -->
+        <div class="card shadow mt-4">
+            <div class="card-header">
+                <h6 class="mb-0">Newsletter Info</h6>
+            </div>
+            <div class="card-body">
+                <p><strong>Title:</strong> {{ newsletter.title }}</p>
+                <p><strong>Status:</strong> 
+                    <span class="badge 
+                        {% if newsletter.status == 'Sent' %}bg-success
+                        {% elif newsletter.status == 'Scheduled' %}bg-info
+                        {% elif newsletter.status == 'Ready to Send' %}bg-warning
+                        {% else %}bg-secondary{% endif %}">
+                        {{ newsletter.status }}
+                    </span>
+                </p>
+                <p><strong>Created:</strong> {{ newsletter.created_at|date:"M d, Y" }}</p>
+                {% if newsletter.scheduled_date %}
+                <p><strong>Scheduled:</strong> {{ newsletter.scheduled_date|date:"M d, Y H:i" }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

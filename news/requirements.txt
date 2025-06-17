@@ -1,4 +1,20 @@
-asgiref==3.8.1
+# Core Django
 Django==5.1.4
+asgiref==3.8.1
 sqlparse==0.5.3
 typing_extensions==4.12.2
+
+# Task Queue - Removed (not needed for direct email sending)
+
+# Email
+django-crispy-forms==2.1
+crispy-bootstrap5==0.7
+
+# Environment variables
+python-decouple==3.8
+
+# Timezone support
+pytz==2023.3
+
+# Development tools
+django-debug-toolbar==4.2.0

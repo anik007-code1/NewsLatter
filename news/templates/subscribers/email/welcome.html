@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to The Idea Engine!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .welcome-message {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+        .benefits {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        .benefits h3 {
+            color: #495057;
+            margin-top: 0;
+        }
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .benefit-icon {
+            background-color: #28a745;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .cta-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #6c757d;
+            text-decoration: none;
+        }
+        .unsubscribe-link {
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💡 Welcome to The Idea Engine!</h1>
+            <p>Thank you for joining our creative community</p>
+        </div>
+        
+        <div class="content">
+            <div class="welcome-message">
+                <p>Hello{% if subscriber.full_name %} {{ subscriber.full_name }}{% endif %}!</p>
+                
+                <p>We're thrilled to have you as part of The Idea Engine community! Your subscription has been confirmed, and you're all set to receive fresh ideas, creative inspiration, and innovative insights delivered straight to your inbox.</p>
+            </div>
+
+            <div class="benefits">
+                <h3>🌟 What You Can Expect:</h3>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">💡</div>
+                    <div>
+                        <strong>Creative Sparks</strong><br>
+                        Fresh ideas and creative inspiration to fuel your next breakthrough
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">🚀</div>
+                    <div>
+                        <strong>Innovation Insights</strong><br>
+                        Cutting-edge trends and innovative strategies from industry leaders
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">🎯</div>
+                    <div>
+                        <strong>Actionable Tips</strong><br>
+                        Practical advice you can implement immediately to drive results
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">✨</div>
+                    <div>
+                        <strong>Exclusive Content</strong><br>
+                        Premium insights and resources available only to subscribers
+                    </div>
+                </div>
+            </div>
+
+<!--            <div class="cta-section">-->
+<!--                <p>Ready to explore? Visit our website to discover more:</p>-->
+<!--                <a href="{{ site_url }}" class="cta-button">Visit Our Website</a>-->
+<!--            </div>-->
+
+            <div style="background-color: #e3f2fd; padding: 20px; border-radius: 8px; margin: 25px 0;">
+                <h4 style="color: #1976d2; margin-top: 0;">📧 What's Next?</h4>
+                <p style="margin-bottom: 0;">Keep an eye on your inbox! Our next newsletter will arrive soon with valuable content curated just for you. Make sure to add our email to your contacts to ensure you never miss an update.</p>
+            </div>
+
+            <p>If you have any questions or feedback, feel free to reply to this email. We'd love to hear from you!</p>
+            
+            <p>Welcome aboard!<br>
+            <strong>The Newsletter Team</strong></p>
+        </div>
+        
+        <div class="footer">
+            <div class="social-links">
+                <a href="#">Facebook</a> |
+                <a href="#">Twitter</a> |
+                <a href="#">LinkedIn</a> |
+                <a href="#">Website</a>
+            </div>
+            
+            <p>You're receiving this email because you subscribed to our newsletter at {{ site_url }}</p>
+            <p>This email was sent to {{ subscriber.email }}</p>
+            
+            <p>
+                <a href="{{ site_url }}/unsubscribe/" class="unsubscribe-link">
+                    Unsubscribe from future emails
+                </a>
+            </p>
+            
+            <p>&copy; 2024 The Idea Engine. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

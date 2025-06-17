@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Subscribe - The Idea Engine{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header text-center">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>Join The Idea Engine
+                </h3>
+                <p style="color: white;" class="mb-0 mt-2 opacity-75">Start your journey of inspiration today</p>
+            </div>
+            <div class="card-body">
+                <p style="color: white;" class="mb-4 text-center">
+                    Join The Idea Engine to receive fresh ideas, creative inspiration, and innovative insights directly in your inbox.
+                </p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">Email Address *</label>
+                        <input type="email" name="email" id="id_email" class="form-control" placeholder="Enter your email address" required>
+                        {% if form.email.errors %}
+                            <div class="text-danger">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_first_name" class="form-label">First Name</label>
+                            <input type="text" name="first_name" id="id_first_name" class="form-control" placeholder="First name (optional)">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_last_name" class="form-label">Last Name</label>
+                            <input type="text" name="last_name" id="id_last_name" class="form-control" placeholder="Last name (optional)">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-lg w-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; border-radius: 15px; padding: 15px; font-weight: 600;">
+                        <i class="fas fa-rocket me-2"></i>Start My Idea Journey
+                    </button>
+                </form>
+                
+                <hr>
+                <p class="small text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    By subscribing, you agree to receive our newsletter. You can unsubscribe at any time.
+                    We respect your privacy and will never share your email address.
+                </p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-3">
+            <a href="{% url 'newsletter:home' %}" class="text-decoration-none">
+                <i class="fas fa-arrow-left"></i> Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

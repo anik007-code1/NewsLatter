@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to The Idea Engine!{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <div class="card shadow">
+            <div class="card-body py-5">
+                <i class="fas fa-check-circle fa-5x text-success mb-4"></i>
+                <h1 class="text-success">💡 Welcome to The Idea Engine!</h1>
+                <p class="lead">You're now part of our creative community!</p>
+                <p class="text-muted">
+                    Your subscription is active immediately. You'll start receiving fresh ideas, creative inspiration,
+                    and innovative insights. We've also sent you a welcome email with more information.
+                </p>
+
+                <div class="alert alert-success mt-4">
+                    <i class="fas fa-envelope"></i>
+                    <strong>Welcome Email Sent!</strong>
+                    Check your inbox for a welcome message with more details about what to expect.
+                </div>
+                
+                <div class="mt-4">
+                    <a href="{% url 'newsletter:home' %}" class="btn btn-primary">
+                        <i class="fas fa-home"></i> Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

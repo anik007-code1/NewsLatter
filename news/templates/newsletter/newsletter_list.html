@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Newsletters - Newsletter App{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-newspaper"></i> Newsletters</h1>
+    <a href="{% url 'newsletter:create' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Create Newsletter
+    </a>
+</div>
+
+{% if newsletters %}
+<div class="row">
+    {% for newsletter in newsletters %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <small class="text-muted bg-light p-1 rounded">{{ newsletter.created_at|date:"M d, Y" }}</small>
+                <span class="badge 
+                    {% if newsletter.status == 'Sent' %}bg-success
+                    {% elif newsletter.status == 'Scheduled' %}bg-info
+                    {% elif newsletter.status == 'Ready to Send' %}bg-warning
+                    {% else %}bg-secondary{% endif %}">
+                    {{ newsletter.status }}
+                </span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title bg-light p-1 rounded">{{ newsletter.title }}</h5>
+                <p class="card-text text-muted bg-light p-2 rounded">{{ newsletter.subject }}</p>
+                <p class="card-text bg-light p-2 rounded">
+                    <small class="text-muted">
+                        By {{ newsletter.created_by.username }}
+                        {% if newsletter.scheduled_date %}
+                        <br>Scheduled: {{ newsletter.scheduled_date|date:"M d, Y H:i" }}
+                        {% endif %}
+                    </small>
+                </p>
+            </div>
+            <div class="card-footer bg-transparent">
+                <div class="btn-group w-100" role="group">
+                    <a href="{% url 'newsletter:detail' newsletter.pk %}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-eye"></i> View
+                    </a>
+                    {% if not newsletter.is_sent %}
+                    <a href="{% url 'newsletter:edit' newsletter.pk %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'newsletter:preview' newsletter.pk %}" class="btn btn-outline-info btn-sm">
+                        <i class="fas fa-search"></i> Preview
+                    </a>
+                </div>
+                {% if not newsletter.is_sent %}
+                <form method="post" action="{% url 'newsletter:send' newsletter.pk %}" class="mt-2">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-sm w-100" 
+                            onclick="return confirm('Are you sure you want to send this newsletter?')">
+                        <i class="fas fa-paper-plane"></i> Send Now
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination would go here if needed -->
+
+{% else %}
+<div class="text-center py-5">
+    <i class="fas fa-newspaper fa-5x text-muted mb-3"></i>
+    <h3 class="text-muted">No newsletters yet</h3>
+    <p class="text-muted">Create your first newsletter to get started.</p>
+    <a href="{% url 'newsletter:create' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Create Newsletter
+    </a>
+</div>
+{% endif %}
+{% endblock %}

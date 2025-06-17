@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Welcome - The Idea Engine{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="position-relative">
+                <h1 class="display-3 mb-4">💡 Welcome to The Idea Engine!</h1>
+                <p class="lead mb-4">Fuel your creativity with fresh ideas, innovative insights, and inspiring content delivered straight to your inbox.</p>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <p class="mb-3">
+                            <span class="badge bg-light text-dark me-2">✨ Creative Inspiration</span>
+                            <span class="badge bg-light text-dark me-2">🚀 Innovation Tips</span>
+                            <span class="badge bg-light text-dark">🎯 Actionable Insights</span>
+                        </p>
+<!--                        <p class="small opacity-75">✅ Instant subscription - No confirmation required!</p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subscription Form -->
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>Join The Idea Engine
+                </h3>
+                <p class="mb-0 mt-2 opacity-75">Start your journey of inspiration today</p>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'subscribers:subscribe' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">Email Address *</label>
+                        <input type="email" name="email" id="id_email" class="form-control" placeholder="Enter your email address" required>
+                        {% if form.email.errors %}
+                            <div class="text-danger">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_first_name" class="form-label">First Name</label>
+                            <input type="text" name="first_name" id="id_first_name" class="form-control" placeholder="First name (optional)">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_last_name" class="form-label">Last Name</label>
+                            <input type="text" name="last_name" id="id_last_name" class="form-control" placeholder="Last name (optional)">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-lg w-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; border-radius: 15px; padding: 15px; font-weight: 600; transition: all 0.3s ease;">
+                        <i class="fas fa-rocket me-2"></i>Start My Idea Journey
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="row mt-5">
+            <div class="col-md-4 text-center mb-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body p-4">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-lightbulb fa-3x"></i>
+                        </div>
+                        <h5 class="fw-bold bg-light p-2 rounded">Creative Sparks</h5>
+                        <p class="text-muted bg-light p-2 rounded">Fresh ideas and creative inspiration to fuel your next breakthrough.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body p-4">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-rocket fa-3x"></i>
+                        </div>
+                        <h5 class="fw-bold bg-light p-2 rounded">Innovation Insights</h5>
+                        <p class="text-muted bg-light p-2 rounded">Cutting-edge trends and innovative strategies from industry leaders.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body p-4">
+                        <div class="feature-icon mb-4">
+                            <i class="fas fa-bullseye fa-3x"></i>
+                        </div>
+                        <h5 class="fw-bold bg-light p-2 rounded">Actionable Tips</h5>
+                        <p class="text-muted bg-light p-2 rounded">Practical advice you can implement immediately to drive results.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trust Indicators -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border: none;">
+                    <div class="card-body text-center py-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-3 mb-3 mb-md-0">
+                                <i class="fas fa-shield-alt fa-2x text-success mb-2"></i>
+                                <p class="mb-0 small"><strong>Privacy Protected</strong><br>Your data is safe with us</p>
+                            </div>
+                            <div class="col-md-3 mb-3 mb-md-0">
+                                <i class="fas fa-clock fa-2x text-info mb-2"></i>
+                                <p class="mb-0 small"><strong>Weekly Delivery</strong><br>Fresh content every week</p>
+                            </div>
+                            <div class="col-md-3 mb-3 mb-md-0">
+                                <i class="fas fa-users fa-2x text-warning mb-2"></i>
+                                <p class="mb-0 small"><strong>Growing Community</strong><br>Join thousands of innovators</p>
+                            </div>
+                            <div class="col-md-3">
+                                <i class="fas fa-times-circle fa-2x text-danger mb-2"></i>
+                                <p class="mb-0 small"><strong>Easy Unsubscribe</strong><br>Leave anytime, no questions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

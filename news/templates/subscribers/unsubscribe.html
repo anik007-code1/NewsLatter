@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Unsubscribe - The Idea Engine{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-times-circle"></i> Unsubscribe from The Idea Engine
+                </h3>
+            </div>
+            <div class="card-body">
+                <p style="color: white;" class="mb-4 text-center">
+                    We're sorry to see you go! Enter your email address below to unsubscribe from our newsletter.
+                </p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">Email Address</label>
+                        <input type="email" name="email" id="id_email" class="form-control" placeholder="Enter your email address" required>
+                        {% if form.email.errors %}
+                            <div class="text-danger">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-danger btn-lg w-100">
+                        <i class="fas fa-times-circle"></i> Unsubscribe
+                    </button>
+                </form>
+                
+                <hr>
+                <p class="small text-muted">
+                    <i class="fas fa-info-circle"></i> 
+                    Once you unsubscribe, you will no longer receive our newsletter emails.
+                    You can always subscribe again later if you change your mind.
+                </p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-3">
+            <a href="{% url 'newsletter:home' %}" class="text-decoration-none">
+                <i class="fas fa-arrow-left"></i> Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Subscription Confirmed - Newsletter App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <div class="card shadow">
+            <div class="card-body py-5">
+                <i class="fas fa-envelope-circle-check fa-5x text-success mb-4"></i>
+                <h1 class="text-success">Subscription Confirmed!</h1>
+                <p class="lead">Welcome to our newsletter, {{ subscriber.full_name|default:subscriber.email }}!</p>
+                <p class="text-muted">
+                    Your subscription has been successfully confirmed. You'll now receive our latest 
+                    updates and news directly in your inbox.
+                </p>
+                
+                <div class="alert alert-success mt-4">
+                    <i class="fas fa-check-circle"></i>
+                    <strong>You're all set!</strong> 
+                    Keep an eye on your inbox for our upcoming newsletters.
+                </div>
+                
+                <div class="mt-4">
+                    <a href="{% url 'newsletter:home' %}" class="btn btn-primary me-2">
+                        <i class="fas fa-home"></i> Back to Home
+                    </a>
+                    <a href="{% url 'subscribers:unsubscribe' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times"></i> Unsubscribe
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

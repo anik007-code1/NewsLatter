@@ -1,0 +1,1 @@
+# Celery imports removed - using direct email sending
